@@ -1,0 +1,27 @@
+# Core Dependencies for AI Security Gateway
+mcp[auth]>=1.9,<2
+starlette>=0.40
+uvicorn[standard]>=0.30
+pydantic>=2.0,<3
+pydantic-settings>=2.0,<3
+pyyaml>=6.0
+structlog>=24.0
+python-stdnum>=1.19
+PyJWT[crypto]>=2.8
+httpx>=0.27
+python-dotenv>=1.0
+
+# Development/Testing Dependencies
+pytest>=8.0
+pytest-asyncio>=0.23
+anyio[trio]>=4.0
+
+# Machine Learning Dependencies
+scikit-learn>=1.5.0
+joblib>=1.4.0
+pandas>=2.2.0
+
+# Document Scanning Dependencies
+pymupdf>=1.24
+pytesseract>=0.3.10
+Pillow>=10.0

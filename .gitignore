@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# Secrets / Environment
+.env
+.env.*
+!.env.example
+
+# DB / Data
+*.db
+graph.db
+
+# Node
+node_modules/
+dist/
+
+# IDE
+.vscode/
+.idea/
+*.DS_Store
+
+# Pytest
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# Test artifacts (not keys)
