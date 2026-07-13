@@ -1,0 +1,83 @@
+# ────────────────────────────────────────────────────────────────
+# AI Security Gateway — Default Security Policy
+# ────────────────────────────────────────────────────────────────
+# Each detector_name maps severity levels to actions.
+# Valid actions: ALLOW | WARN_CONFIRM | BLOCK
+#
+# Override the path to this file via POLICY_FILE_PATH env var.
+# ────────────────────────────────────────────────────────────────
+
+# Aggregation rule when multiple detectors fire in the same scan.
+# "highest_severity" → the worst single-match action wins.
+# Future options: "majority_vote", "weighted_sum"
+aggregation_rule: highest_severity
+
+detectors:
+  api_key:
+    critical: BLOCK
+    high: BLOCK
+    medium: WARN_CONFIRM
+    low: WARN_CONFIRM
+
+  credit_card:
+    critical: BLOCK
+    high: WARN_CONFIRM
+    medium: WARN_CONFIRM
+    low: ALLOW
+
+  cvv:
+    critical: BLOCK
+    high: WARN_CONFIRM
+    medium: WARN_CONFIRM
+    low: ALLOW
+
+  national_id:
+    critical: BLOCK
+    high: BLOCK
+    medium: WARN_CONFIRM
+    low: ALLOW
+
+  financial:
+    critical: BLOCK
+    high: BLOCK
+    medium: WARN_CONFIRM
+    low: ALLOW
+
+  prompt_injection:
+    critical: BLOCK
+    high: BLOCK
+    medium: WARN_CONFIRM
+    low: WARN_CONFIRM
+
+  pdf_prompt_injection:
+    critical: BLOCK
+    high: BLOCK
+    medium: WARN_CONFIRM
+    low: ALLOW
+
+  image_prompt_injection:
+    critical: BLOCK
+    high: BLOCK
+    medium: WARN_CONFIRM
+    low: ALLOW
+
+  zip_env_leak:
+    critical: BLOCK
+    high: BLOCK
+    medium: BLOCK
+    low: WARN_CONFIRM
+
+  env_file:
+    critical: BLOCK
+    high: BLOCK
+    medium: WARN_CONFIRM
+    low: ALLOW
+
+# ── Default fallback ─────────────────────────────────────────────
+# Used when a detector fires but its name is not listed above,
+# or when a severity level is not listed for a known detector.
+defaults:
+  critical: BLOCK
+  high: WARN_CONFIRM
+  medium: WARN_CONFIRM
+  low: ALLOW
