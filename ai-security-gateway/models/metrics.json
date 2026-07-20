@@ -1,0 +1,22 @@
+{
+  "trained_at": "2026-07-20T07:18:49.173328Z",
+  "train_samples": 29999,
+  "test_samples": 7500,
+  "default_threshold": 0.5,
+  "optimal_threshold": 0.8075,
+  "at_default_threshold": {
+    "precision": 0.9838,
+    "recall": 0.9759,
+    "f1": 0.9798,
+    "false_positives": 78,
+    "false_negatives": 117
+  },
+  "at_optimal_threshold": {
+    "precision": 0.9933,
+    "recall": 0.951,
+    "f1": 0.9717,
+    "fbeta_0_5": 0.9846,
+    "false_positives": 31,
+    "false_negatives": 238
+  }
+}
