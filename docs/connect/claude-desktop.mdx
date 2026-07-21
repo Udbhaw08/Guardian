@@ -1,0 +1,67 @@
+---
+title: "Connect to Claude Desktop"
+description: "Run Guardian locally and connect it to the Claude Desktop app — no server hosting required."
+---
+
+This is the easiest way to use Guardian with Claude: the Desktop app runs Guardian in the background for you over Standard I/O. There's no server to host and no ngrok tunnel needed.
+
+<Steps>
+  <Step title="Set up the code">
+    Clone the repository and install dependencies:
+
+    ```bash
+    python -m venv venv
+    # Windows
+    .\venv\Scripts\activate
+    # Mac/Linux
+    source venv/bin/activate
+
+    pip install -r requirements.txt
+    ```
+  </Step>
+  <Step title="Open your Claude Desktop config file">
+    <Tabs>
+      <Tab title="Windows">
+        `%APPDATA%\Claude\claude_desktop_config.json`
+      </Tab>
+      <Tab title="Mac">
+        `~/Library/Application Support/Claude/claude_desktop_config.json`
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step title="Add Guardian as an MCP server">
+    Add the following, replacing the paths with the actual absolute paths on your machine:
+
+    ```json
+    {
+      "mcpServers": {
+        "security-gateway": {
+          "command": "C:\\path\\to\\your\\venv\\Scripts\\python.exe",
+          "args": [
+            "C:\\path\\to\\your\\ai-security-gateway\\mcp_server\\run_stdio.py"
+          ]
+        }
+      }
+    }
+    ```
+  </Step>
+  <Step title="Restart Claude Desktop">
+    Quit and reopen the app completely. Look for a 🔌 plug icon in the chat input bar — that means Guardian connected successfully.
+  </Step>
+</Steps>
+
+<Note>
+  This local mode always runs without authentication, since stdio connections don't go over the network — there's no login step for you here.
+</Note>
+
+## Try it
+
+Send this message to Claude:
+
+```
+Please use the scan_prompt tool to analyze this text: "Deploy this code using my AWS key: AKIAIOSFODNN7EXAMPLE."
+```
+
+Claude should call `scan_prompt`, and since this contains a live-looking AWS key, you should see a **blocked** result. See [Understanding Results](/results/decisions) for what each outcome means, and [How Scanning Works](/how-scanning-works/overview) for how this happens automatically on real messages, without asking explicitly.
+
+Not seeing the plug icon or a scan running? See [Troubleshooting](/troubleshooting).

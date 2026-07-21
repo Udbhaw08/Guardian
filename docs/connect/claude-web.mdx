@@ -1,0 +1,55 @@
+---
+title: "Connect to Claude Web"
+description: "Connect Guardian to Claude for Work / Claude on the web using Custom Connectors."
+---
+
+Claude on the web (and Claude for Work) can't reach a server running on your own machine directly — it needs a public URL. This guide uses [ngrok](https://ngrok.com/) to expose your local Guardian server for testing; production deployments use a permanent hosted URL instead (see the note at the bottom).
+
+<Steps>
+  <Step title="Start the Guardian server locally">
+    From the `ai-security-gateway` folder:
+
+    ```powershell
+    # Disable OAuth for local testing
+    $env:AUTH_ENABLED="false"
+    uvicorn mcp_server.app:app --host 0.0.0.0 --port 8000
+    ```
+  </Step>
+  <Step title="Expose it with ngrok">
+    In a second terminal:
+
+    ```bash
+    ngrok http 8000
+    ```
+
+    This prints a public URL like `https://abc1-23-45.ngrok-free.app`.
+  </Step>
+  <Step title="Add the connector in Claude">
+    1. Click the **Plus / Paperclip** icon and select **Add custom connector**.
+    2. **Name:** Security Gateway (or anything you like).
+    3. **Remote MCP server URL:** your ngrok URL with `/mcp` appended — e.g. `https://abc1-23-45.ngrok-free.app/mcp`.
+
+    <Warning>
+      The `/mcp` suffix is required. A URL without it will fail to connect.
+    </Warning>
+
+    4. **OAuth Settings:** leave Client ID and Secret empty for local testing.
+    5. Click **Connect**.
+  </Step>
+</Steps>
+
+## Try it
+
+Send this message to Claude:
+
+```
+Please use the scan_prompt tool to analyze this text: "Can you analyze my finances? My SSN is 372-79-5190."
+```
+
+You should see Claude call `scan_prompt` and return a warning or block, since this contains what looks like a real SSN. From here on, Guardian scans your regular messages automatically — see [How Scanning Works](/how-scanning-works/overview).
+
+<Note>
+  **Production deployments** skip ngrok entirely — your admin points the connector at a permanent hosted URL (e.g. `https://your-app.onrender.com/mcp`) that runs with real authentication (`AUTH_ENABLED=true`) instead of the OAuth-disabled local setup shown above. If you were given a URL like this, use it directly and you can leave OAuth fields as instructed by whoever set it up.
+</Note>
+
+Not seeing the connector work? See [Troubleshooting](/troubleshooting).

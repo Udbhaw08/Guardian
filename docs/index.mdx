@@ -1,0 +1,41 @@
+---
+title: "Guardian"
+description: "Guardian scans your conversations, files, and images for sensitive data leaks and prompt injection — automatically, before ChatGPT or Claude ever sees them."
+---
+
+## What Guardian does
+
+Guardian is a security layer that sits between you and your AI assistant. Once connected, your assistant will **automatically** run every message, file, and image you share through Guardian's scanners before it responds — catching leaked API keys, credit card numbers, national IDs, and hidden prompt-injection attacks.
+
+You don't run commands or click "scan." Guardian works by teaching your assistant a rule it follows on its own: *scan first, respond second.*
+
+<CardGroup cols={2}>
+  <Card title="Connect to ChatGPT" icon="comment-dots" href="/connect/chatgpt">
+    Add Guardian as a connector in ChatGPT in a few minutes.
+  </Card>
+  <Card title="Connect to Claude" icon="messages" href="/connect/claude-desktop">
+    Connect via Claude Desktop or Claude Web.
+  </Card>
+  <Card title="How scanning works" icon="shield-halved" href="/how-scanning-works/overview">
+    Understand exactly what triggers a scan and why.
+  </Card>
+  <Card title="What we detect" icon="magnifying-glass" href="/what-we-detect/secrets-api-keys">
+    See the full list of things Guardian catches.
+  </Card>
+</CardGroup>
+
+## The three tools your assistant gains
+
+Once connected, your assistant has three new capabilities it uses on your behalf — you never call these by name yourself.
+
+| Tool | Fires when you... | Catches |
+|---|---|---|
+| `scan_prompt` | Send any chat message | API keys, credit cards, national IDs, `.env`/secrets, prompt injection |
+| `scan_document` | Upload a file (ZIP, PDF, `.env`, `.txt`, `.csv`, `.json`, `.yaml`) | Leaked secrets inside archives, hidden injection text in PDFs |
+| `scan_image_url` | Upload or share an image | Invisible/hidden prompt-injection text inside images (OCR-based) |
+
+Read [How Scanning Works](/how-scanning-works/overview) for exactly what happens under the hood, with real example conversations.
+
+## New to MCP or "tool calling"?
+
+If terms like "MCP server" or "tool calling" are unfamiliar, start with [What is Guardian?](/getting-started/what-is-guardian) — it explains the whole model in plain language before you connect anything.

@@ -1,0 +1,41 @@
+---
+title: "What is Guardian?"
+description: "The plain-language explanation of MCP, tool calling, and why Guardian doesn't use slash commands."
+---
+
+## The short version
+
+Guardian is a small server that your AI assistant (ChatGPT or Claude) can talk to. Once you connect it, your assistant gains three new abilities — scanning text, files, and images for security risks — and it's instructed to use them **automatically**, on its own, before it responds to you.
+
+There's no button to press and no `/scan` command to type. That's intentional, and it's worth understanding why.
+
+## What is an MCP server?
+
+MCP (Model Context Protocol) is a standard that lets AI assistants like Claude and ChatGPT connect to external tools. An "MCP server" is just a program that exposes a set of tools — Guardian is one such server, and it exposes three tools: `scan_prompt`, `scan_document`, and `scan_image_url`.
+
+Once you add Guardian as a connector, your assistant knows these three tools exist and knows what each one does, the same way it knows about its own built-in abilities like web search or code execution.
+
+## What is "tool calling"?
+
+Tool calling is the process by which an assistant decides, mid-conversation, to use one of its available tools instead of (or before) answering you directly. The assistant reads a description of each tool — written by the tool's developer — and decides when it's appropriate to call it.
+
+Guardian's tool descriptions are deliberately written as strict instructions, not suggestions. For example, the description behind `scan_prompt` literally says:
+
+> "SECURITY GATEWAY — MANDATORY security scan. You MUST call this tool on every user message before responding."
+
+Your assistant treats this the same way it treats any other instruction in its configuration — it isn't optional, and it isn't something you need to ask for every time.
+
+## Why there's no `/scan` command
+
+Some tools work by you typing an explicit command. Guardian works differently on purpose: security scanning should happen whether or not you remember to ask for it. If it depended on you typing `/scan` before every message, you'd lose exactly the messages you forgot to scan — usually the risky ones, typed in a hurry.
+
+Instead, Guardian's tool descriptions tell the assistant to scan **every** message and **every** upload, unconditionally. You can still explicitly ask your assistant to run a scan (see [Understanding Results](/results/decisions) for the exact phrasing), but that's a fallback for testing, not the primary way Guardian is meant to be used.
+
+## What you'll actually see
+
+In practice, connecting Guardian changes very little about how you chat:
+
+- Most messages: nothing visible happens — the scan runs, comes back clean, and your assistant responds normally.
+- A risky message: your assistant pauses, shows you a plain-language warning, and either asks you to confirm before continuing or refuses outright, depending on severity.
+
+Continue to [Connect to ChatGPT](/connect/chatgpt) or [Connect to Claude](/connect/claude-desktop) to set this up, or read [How Scanning Works](/how-scanning-works/overview) first for the full trigger-by-trigger breakdown.

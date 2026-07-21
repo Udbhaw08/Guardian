@@ -1,0 +1,35 @@
+---
+title: "Troubleshooting & FAQ"
+description: "Common issues connecting to and using Guardian."
+---
+
+<AccordionGroup>
+  <Accordion title="My assistant isn't scanning messages automatically">
+    Scanning is decided by your assistant, not guaranteed by Guardian directly — it happens because the tool descriptions tell the assistant scanning is mandatory, and assistants generally follow that reliably, but it's not a hard technical guarantee the way a firewall rule would be.
+
+    If it seems to be skipping scans:
+    - Confirm the connector still shows as connected (look for the plug icon in Claude Desktop, or check your connector list in Claude Web / ChatGPT).
+    - Try forcing a scan explicitly: `Please use the scan_prompt tool to analyze this text: <your text>`. If this works but automatic scanning doesn't, the connection is fine — it's a behavioral inconsistency in that particular conversation. Starting a new conversation often resolves it.
+  </Accordion>
+  <Accordion title="The connector won't connect / doesn't show up">
+    - Double-check the URL ends in `/mcp` — a bare ngrok URL will not work.
+    - Make sure the Guardian server is actually running (`uvicorn mcp_server.app:app --host 0.0.0.0 --port 8000`) and, for local testing, that `AUTH_ENABLED` is set to `false`.
+    - If you're using ngrok, confirm the tunnel is still active — free ngrok tunnels expire and print a new URL each time you restart them (see below).
+  </Accordion>
+  <Accordion title="My ngrok URL keeps changing">
+    Free ngrok tunnels generate a new random URL every time you restart `ngrok http 8000`. If you reconnect on a different day, update the connector URL in Claude/ChatGPT to match the new one. For a stable, permanent URL, use a production deployment instead — see the production note on the [ChatGPT](/connect/chatgpt) or [Claude Web](/connect/claude-web) connect pages.
+  </Accordion>
+  <Accordion title="I got WARN_CONFIRM but don't see a way to confirm">
+    Just reply normally in the chat confirming you'd like to proceed (e.g. "yes, go ahead") — there's no special button, this is a normal conversational turn. If your assistant doesn't pick up your confirmation, try rephrasing more explicitly, e.g. "I confirm, please proceed."
+  </Accordion>
+  <Accordion title="Everything I type gets blocked, even harmless messages">
+    This usually means either your organization's policy has been configured more strictly than the defaults on this site (see [Severity Levels](/results/severity)), or a message contains something that coincidentally matches a pattern (e.g. a long number that happens to pass a card-number checksum). If it seems consistently wrong, share the (redacted) `matched_types` from the response with whoever administers your Guardian deployment.
+  </Accordion>
+  <Accordion title="Claude Desktop doesn't show the plug icon">
+    - Confirm the paths in `claude_desktop_config.json` are absolute, not relative, and point at your actual Python executable and `run_stdio.py` location.
+    - Fully quit and reopen Claude Desktop — a reload from the tray/menu bar isn't always enough.
+    - Check that the virtual environment referenced in the config has the project's dependencies installed (`pip install -r requirements.txt`).
+  </Accordion>
+</AccordionGroup>
+
+Still stuck? See [What is Guardian?](/getting-started/what-is-guardian) for the underlying model, or the [Glossary](/glossary) if a term is unfamiliar.

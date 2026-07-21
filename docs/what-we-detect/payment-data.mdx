@@ -1,0 +1,30 @@
+---
+title: "Payment Data"
+description: "What Guardian catches: credit card numbers and CVV/CVC codes."
+---
+
+## What's covered
+
+<CardGroup cols={2}>
+  <Card title="Credit card numbers" icon="credit-card">
+    13–19 digit card numbers across Visa, Amex, Mastercard, Discover, and generic card formats. Guardian validates candidates with the Luhn checksum before flagging them, which cuts down on false positives from random long numbers that just happen to look card-shaped.
+  </Card>
+  <Card title="CVV / CVC codes" icon="lock">
+    3 or 4-digit security codes, detected when they appear near payment-context language (e.g. next to "CVV" or a card number) rather than as a bare number on its own.
+  </Card>
+</CardGroup>
+
+## Example (masked)
+
+```text
+Detected: visa
+Masked value shown to you: 4111 **** **** 1111
+Severity: high → WARN_CONFIRM
+```
+
+## Where this applies
+
+- Chat messages — via [scan_prompt](/how-scanning-works/scanning-messages)
+- Text-based uploaded files — via [scan_document](/how-scanning-works/scanning-files)
+
+See [Severity Levels](/results/severity) — note that low-severity card-like matches are allowed through, since not every long number is a real card.

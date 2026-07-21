@@ -1,0 +1,53 @@
+---
+title: "Scanning Files"
+description: "scan_document — runs on every uploaded file before your assistant says a word about it."
+---
+
+## What triggers it
+
+`scan_document` runs whenever you upload a file — ZIP archives, PDFs, `.env`/config files, or text-based files (`.txt`, `.csv`, `.json`, `.yaml`, `.toml`, `.ini`). Your assistant is instructed to call this **before** summarizing, describing, listing contents, or answering any question about the file — extracting the file's text (or, for a ZIP, listing its filenames) is the only step allowed before the tool call, and it must happen immediately after.
+
+<Note>
+  Images are handled by a different tool — see [Scanning Images](/how-scanning-works/scanning-images).
+</Note>
+
+## How each file type is handled
+
+<AccordionGroup>
+  <Accordion title="ZIP archives (.zip)">
+    Guardian doesn't unzip and read every file's contents — it checks the **filenames** inside the archive for anything that looks like a leaked secret, such as a `.env` file buried in a subfolder. A `.env` at the archive root is treated as more severe than one nested several folders deep.
+  </Accordion>
+  <Accordion title="PDF files (.pdf)">
+    Guardian scans the extracted text for hidden prompt-injection instructions — text placed in tiny fonts, white-on-white text, or content positioned off the visible page, none of which a normal read-through would catch, combined with a machine-learning classifier trained to spot injection patterns.
+  </Accordion>
+  <Accordion title="ENV / config files (.env, .env.example, .envrc, config.env)">
+    Guardian scans the full file contents for secret-looking assignments (API keys, tokens, passwords). Your assistant is instructed never to repeat the file's actual values back to you — only Guardian's own warning message describes the finding.
+  </Accordion>
+  <Accordion title="Text files (.txt, .csv, .json, .yaml, .yml, .toml, .ini, .cfg)">
+    The full file contents are scanned the same way a pasted chat message would be — for API keys, card numbers, national IDs, and other sensitive data.
+  </Accordion>
+</AccordionGroup>
+
+## Example: a ZIP with a hidden .env file
+
+<CodeGroup>
+```text You upload
+project-backup.zip
+  containing: app.py, requirements.txt, src/config.env
+```
+
+```text What happens next (not shown to you)
+Assistant lists filenames, calls scan_document(
+  content="app.py\nrequirements.txt\nsrc/config.env",
+  filename="project-backup.zip"
+)
+→ zip_env_leak detector fires (nested .env found)
+→ decision: WARN_CONFIRM
+```
+</CodeGroup>
+
+Your assistant shows the warning and waits for you to explicitly confirm before it says anything about the archive's contents. See [Understanding Results](/results/decisions).
+
+## Example: a PDF with invisible injected text
+
+If a PDF contains an instruction hidden in tiny, white-on-white, or off-page text — a technique used to smuggle instructions past a human reader while an AI still "reads" the raw text — `pdf_prompt_injection` fires and the assistant is stopped before it acts on that hidden instruction.

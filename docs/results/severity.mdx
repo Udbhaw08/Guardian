@@ -1,0 +1,37 @@
+---
+title: "Severity Levels"
+description: "How low, medium, high, and critical findings map to ALLOW, WARN_CONFIRM, and BLOCK."
+---
+
+Every detector that fires assigns its finding a severity: **low**, **medium**, **high**, or **critical**. Severity is what actually decides the outcome — not the detector name by itself.
+
+## The default policy
+
+| Detector | low | medium | high | critical |
+|---|---|---|---|---|
+| API keys & secrets | WARN_CONFIRM | WARN_CONFIRM | BLOCK | BLOCK |
+| Credit cards | ALLOW | WARN_CONFIRM | WARN_CONFIRM | BLOCK |
+| CVV / CVC | ALLOW | WARN_CONFIRM | WARN_CONFIRM | BLOCK |
+| National IDs | ALLOW | WARN_CONFIRM | BLOCK | BLOCK |
+| Financial identifiers | ALLOW | WARN_CONFIRM | BLOCK | BLOCK |
+| Prompt injection | WARN_CONFIRM | WARN_CONFIRM | BLOCK | BLOCK |
+| Hidden PDF injection | ALLOW | WARN_CONFIRM | BLOCK | BLOCK |
+| Hidden image injection | ALLOW | WARN_CONFIRM | BLOCK | BLOCK |
+| Leaked `.env` in a ZIP | WARN_CONFIRM | BLOCK | BLOCK | BLOCK |
+| `.env` / config files | ALLOW | WARN_CONFIRM | BLOCK | BLOCK |
+
+<Note>
+  This table reflects Guardian's default policy. If your organization has customized it, some rows may differ — ask whoever deployed Guardian for you if outcomes seem to disagree with this page.
+</Note>
+
+## Why severity varies within one detector
+
+A single detector doesn't always mean the same severity every time. For example, a financial-identifier match might be `low` for a routine bank code format but `high` for what looks like a real, complete bank account number — the detector looks at *what* it found, not just *that* it found something.
+
+Prompt-injection detection works similarly but for a different reason: it combines several independent checks (a rules-based scan, a machine-learning classifier, and a context check that looks at whether the surrounding text is, say, an innocent question about how prompt injection works versus an actual attempt to execute one) and weighs them together into a single confidence-based severity, rather than a flat yes/no.
+
+## Aggregation: worst finding wins
+
+If a scan turns up more than one thing — say, a low-severity financial code and a critical API key in the same message — the outcome is based on the **highest** severity found, not an average. One critical finding is enough to block the entire message, regardless of what else was or wasn't found alongside it.
+
+Back to [Decisions](/results/decisions) for what to do about each outcome.

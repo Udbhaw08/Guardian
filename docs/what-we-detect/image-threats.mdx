@@ -1,0 +1,25 @@
+---
+title: "Hidden Image Threats"
+description: "What Guardian catches: prompt injection hidden inside images, invisible to the naked eye."
+---
+
+## What's covered
+
+<Card title="Hidden image injection" icon="image">
+  Prompt-injection text embedded in an image using techniques meant to be invisible or near-invisible to a human — and, importantly, to a vision model just "looking" at the image normally. Guardian downloads the image and runs OCR combined with machine-learning analysis to surface text a normal glance would miss.
+</Card>
+
+## Why images need a dedicated scan
+
+A vision-capable assistant can describe most images accurately just by looking at them — but that's exactly the gap this detector is built to close. Text that's rendered in a near-invisible color, hidden in image metadata, or encoded in a way that only OCR (not casual visual reading) picks up can carry an injection payload that a normal "describe this image" pass would never surface. That's why Guardian's `scan_image_url` tool explicitly instructs the assistant not to describe the image itself before the scan runs — see [Scanning Images](/how-scanning-works/scanning-images).
+
+## Example
+
+```text
+Detected: image_prompt_injection
+Severity: high → BLOCK
+```
+
+## Where this applies
+
+Uploaded or shared images (PNG, JPG, JPEG, WEBP, BMP) — via [scan_image_url](/how-scanning-works/scanning-images). If the image fails to download, the scan returns a cautious `WARN_CONFIRM` rather than silently skipping the check.

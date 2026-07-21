@@ -1,0 +1,37 @@
+---
+title: "Glossary"
+description: "Plain-language definitions for terms used throughout these docs."
+---
+
+<AccordionGroup>
+  <Accordion title="MCP (Model Context Protocol)">
+    A standard that lets AI assistants like Claude and ChatGPT connect to external tools. Guardian is an "MCP server" — a program that exposes tools an assistant can use.
+  </Accordion>
+  <Accordion title="Tool calling">
+    The process by which an assistant decides, during a conversation, to use one of its available tools instead of (or before) responding directly. Guardian's tools are described as mandatory, so the assistant calls them on every relevant message without you asking.
+  </Accordion>
+  <Accordion title="Connector">
+    The setting in Claude or ChatGPT that links your assistant to an MCP server like Guardian, usually by URL.
+  </Accordion>
+  <Accordion title="ngrok">
+    A tool that creates a temporary public URL pointing at a server running on your own machine — used here so Claude Web or ChatGPT (which run in the cloud) can reach a Guardian server you're running locally.
+  </Accordion>
+  <Accordion title="OCR (Optical Character Recognition)">
+    Technology that extracts text from an image. Guardian uses OCR as part of scanning images and PDFs, since it can surface text that's technically present but not obviously visible to a human reader.
+  </Accordion>
+  <Accordion title="Detector">
+    One specific check Guardian runs — e.g. the `api_key` detector looks for cloud API keys, the `credit_card` detector looks for card numbers. A single scan runs all detectors relevant to the content type.
+  </Accordion>
+  <Accordion title="Severity">
+    How serious a single detector's finding is: low, medium, high, or critical. See [Severity Levels](/results/severity).
+  </Accordion>
+  <Accordion title="Decision">
+    The final outcome of a scan: ALLOW, WARN_CONFIRM, or BLOCK. See [Understanding Results](/results/decisions).
+  </Accordion>
+  <Accordion title="Masked value">
+    A partially hidden version of a sensitive match (e.g. `AKIA****`) shown in place of the real value. Guardian never shows or stores the full raw value — see [Privacy & Trust](/privacy-trust).
+  </Accordion>
+  <Accordion title="Prompt injection">
+    An attempt to slip hidden instructions into content an AI reads, aiming to override its intended behavior. See [Prompt Injection](/what-we-detect/prompt-injection).
+  </Accordion>
+</AccordionGroup>

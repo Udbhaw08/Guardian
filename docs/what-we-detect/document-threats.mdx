@@ -1,0 +1,31 @@
+---
+title: "Hidden Document Threats"
+description: "What Guardian catches: prompt injection hidden inside PDFs, and secrets leaked inside ZIP archives."
+---
+
+## What's covered
+
+<CardGroup cols={2}>
+  <Card title="Hidden PDF injection" icon="file-pdf">
+    Prompt-injection instructions concealed inside a PDF using techniques designed to be invisible to a human reading the document: tiny font sizes, white-on-white text, or text positioned off the visible page. Combined with a machine-learning classifier over the extracted text.
+  </Card>
+  <Card title="Leaked secrets in ZIPs" icon="file-zipper">
+    `.env` files or other obviously secret-named files found inside an uploaded ZIP archive, detected by filename — a root-level `.env` is treated as more severe than one buried in a subfolder.
+  </Card>
+</CardGroup>
+
+## Why this matters
+
+A PDF can look completely normal when you open it and still contain instructions meant only for an AI reading its raw text — a way of smuggling a prompt-injection attempt past you without you ever seeing it. Guardian's PDF scan is specifically built to catch the formatting tricks used to hide text like this.
+
+## Example
+
+```text
+Detected: pdf_prompt_injection
+stealth_flags: ["white_on_white", "tiny_font"]
+Severity: high → BLOCK
+```
+
+## Where this applies
+
+Uploaded PDF and ZIP files — via [scan_document](/how-scanning-works/scanning-files). Your assistant is instructed to extract a PDF's text or list a ZIP's filenames only as the immediate first step before calling this tool, never to summarize the file on its own.

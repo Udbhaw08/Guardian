@@ -1,0 +1,30 @@
+---
+title: "Personal & Financial IDs"
+description: "What Guardian catches: national ID numbers and financial account identifiers."
+---
+
+## What's covered
+
+<CardGroup cols={2}>
+  <Card title="National IDs" icon="id-card">
+    US Social Security Numbers (validated against real SSA numbering rules, not just the `###-##-####` shape), India Aadhaar numbers (validated with the Verhoeff checksum), and India PAN numbers.
+  </Card>
+  <Card title="Financial identifiers" icon="building-columns">
+    India GSTIN and IFSC codes, and bank account numbers. Severity varies by subtype — a bank code format is generally lower risk than what looks like a complete, real account number.
+  </Card>
+</CardGroup>
+
+## Example (masked)
+
+```text
+Detected: us_ssn
+Masked value shown to you: ***-**-5190
+Severity: high → BLOCK
+```
+
+## Where this applies
+
+- Chat messages — via [scan_prompt](/how-scanning-works/scanning-messages)
+- Text-based uploaded files and forms — via [scan_document](/how-scanning-works/scanning-files)
+
+When you share a form or ID card as text, your assistant is instructed to extract every field into the scan, not just the parts that obviously look sensitive — see [Scanning Messages](/how-scanning-works/scanning-messages).

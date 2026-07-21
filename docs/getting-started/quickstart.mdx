@@ -1,0 +1,37 @@
+---
+title: "Quickstart"
+description: "Pick your assistant and get connected in a few minutes."
+---
+
+Guardian connects to your AI assistant as an MCP connector. Pick the path that matches how you use your assistant — you can always add the other one later.
+
+<CardGroup cols={3}>
+  <Card title="Claude Desktop" icon="desktop" href="/connect/claude-desktop">
+    Easiest option if you have the Claude Desktop app. No server hosting required.
+  </Card>
+  <Card title="Claude Web" icon="globe" href="/connect/claude-web">
+    For Claude for Work / Claude on the web, using Custom Connectors.
+  </Card>
+  <Card title="ChatGPT" icon="comment-dots" href="/connect/chatgpt">
+    Connect via ChatGPT's Connected Apps / Plugins.
+  </Card>
+</CardGroup>
+
+## What you'll need
+
+<Tabs>
+  <Tab title="Claude Desktop">
+    - The Claude Desktop app installed
+    - Python and this repository cloned locally (Guardian runs on your machine, no internet exposure needed)
+  </Tab>
+  <Tab title="Claude Web or ChatGPT">
+    - This repository cloned locally, running the Guardian server
+    - [ngrok](https://ngrok.com/) (free tier is fine) to expose your local server to the internet, or a deployed production URL if your team already hosts one
+  </Tab>
+</Tabs>
+
+## After connecting
+
+Once your connector shows as active, send a test message. See [Understanding Results](/results/decisions) for the exact phrasing that forces a scan, and [How Scanning Works](/how-scanning-works/overview) for what should happen automatically without you asking.
+
+If nothing seems to trigger, check [Troubleshooting](/troubleshooting) — the most common cause is a stale ngrok URL or the assistant not being told to treat the tool as mandatory.

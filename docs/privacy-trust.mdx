@@ -1,0 +1,31 @@
+---
+title: "Privacy & Trust"
+description: "What Guardian stores, what it never stores, and why."
+---
+
+## The core guarantee: raw sensitive values never leave the detector
+
+When Guardian finds something sensitive — an API key, a card number, an SSN — the raw value is used only inside the detector that found it, for the length of that single check. Everything returned to your assistant, shown to you, or written to any log is a **masked** version instead, like `AKIA****` or `***-**-5190`.
+
+This isn't a configuration option that could be turned off — it's built into how results are structured. A scan result only ever contains:
+
+- The **decision** (`ALLOW` / `WARN_CONFIRM` / `BLOCK`)
+- The **type** of thing found (e.g. `api_key`, `credit_card`) — not the value itself
+- A **masked** preview of the match
+- A plain-language **reason** and **human-readable message**
+
+There is no path in Guardian's design that surfaces the full, unmasked value past the moment of detection.
+
+## What gets logged
+
+Guardian keeps an audit trail of scan activity — when a scan ran, what decision it reached, which detector types fired, and how many matches were found. This log uses the same masked values as everything else; it's built for security visibility (e.g. "how often are people pasting API keys"), not for recovering what was actually shared.
+
+## What Guardian does not do
+
+- It does not store full documents, images, or messages after a scan completes.
+- It does not send your content anywhere beyond the scan itself.
+- It does not use your content to train any model.
+
+## Why this matters for how you use Guardian
+
+Because Guardian only ever shows masked values back, don't rely on its warning messages to remember exactly what was flagged — if you need to know the exact value, you'll need to check your own original message or file. Guardian's job is to stop it from going further, not to be a searchable record of what it caught.

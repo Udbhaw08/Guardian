@@ -1,0 +1,42 @@
+---
+title: "Decisions: ALLOW, WARN_CONFIRM, BLOCK"
+description: "What each scan outcome means and what your assistant does next."
+---
+
+Every scan — whether it's `scan_prompt`, `scan_document`, or `scan_image_url` — ends in exactly one of three decisions.
+
+<CardGroup cols={3}>
+  <Card title="ALLOW" icon="circle-check">
+    Nothing sensitive found. Your assistant responds normally — you won't see any sign a scan even ran.
+  </Card>
+  <Card title="WARN_CONFIRM" icon="triangle-exclamation">
+    Sensitive content found. Your assistant shows you a plain-language warning and waits for you to explicitly confirm before continuing.
+  </Card>
+  <Card title="BLOCK" icon="ban">
+    Critical or high-risk content found. Your assistant refuses outright — it will not process the request, no confirmation option offered.
+  </Card>
+</CardGroup>
+
+## What to do when you see WARN_CONFIRM
+
+Read the warning message — it tells you what type of sensitive content was found (e.g. "credit card number detected"), without ever showing you the raw value back. If you meant to share that content and understand the risk, reply to confirm and your assistant will proceed. If you didn't mean to include it, you can rephrase your message without it.
+
+## What to do when you see BLOCK
+
+Remove or redact the sensitive content before trying again. A blocked message is not sent through to be processed at all — there's no way to "confirm past" a block, by design, since blocks are reserved for the highest-risk findings (live-looking API keys, blatant prompt-injection attempts, secrets in a root-level `.env`).
+
+## How the decision is chosen
+
+A single scan can trigger multiple detectors at once — for example, a message might contain both an API key and a card number. When that happens, Guardian doesn't average the results: **the single most severe finding decides the whole scan's outcome.** If any one thing in your message would cause a block on its own, the entire message is blocked, even if everything else in it was fine.
+
+See [Severity Levels](/results/severity) for how "how severe" is determined per finding.
+
+## Testing a scan manually
+
+Guardian scans automatically by default, but you can also explicitly ask your assistant to run one — useful for testing or if you want to double-check something before sending it for real. Start your message with:
+
+```
+Please use the scan_prompt tool to analyze this text: <your text here>
+```
+
+This isn't a special command Guardian recognizes — it's just instructing your assistant in plain English to call the tool, which it will do because the tool is always available to it.

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Guardian",
+  "theme": "mint",
+  "description": "Guardian scans your conversations, files, and images for sensitive data leaks and prompt injection before ChatGPT or Claude ever sees them.",
+  "colors": {
+    "primary": "#16A34A",
+    "light": "#4ADE80",
+    "dark": "#15803D"
+  },
+  "favicon": "/images/favicon.svg",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get Started",
+        "pages": [
+          "index",
+          "getting-started/what-is-guardian",
+          "getting-started/quickstart"
+        ]
+      },
+      {
+        "group": "Connect Guardian",
+        "pages": [
+          "connect/claude-desktop",
+          "connect/claude-web",
+          "connect/chatgpt"
+        ]
+      },
+      {
+        "group": "How Scanning Works",
+        "pages": [
+          "how-scanning-works/overview",
+          "how-scanning-works/scanning-messages",
+          "how-scanning-works/scanning-files",
+          "how-scanning-works/scanning-images"
+        ]
+      },
+      {
+        "group": "Understanding Results",
+        "pages": [
+          "results/decisions",
+          "results/severity"
+        ]
+      },
+      {
+        "group": "What We Detect",
+        "pages": [
+          "what-we-detect/secrets-api-keys",
+          "what-we-detect/payment-data",
+          "what-we-detect/personal-ids",
+          "what-we-detect/prompt-injection",
+          "what-we-detect/document-threats",
+          "what-we-detect/image-threats"
+        ]
+      },
+      {
+        "group": "Trust & Support",
+        "pages": [
+          "privacy-trust",
+          "troubleshooting",
+          "glossary"
+        ]
+      }
+    ]
+  }
+}

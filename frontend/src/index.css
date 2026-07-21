@@ -1,0 +1,242 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Guardian — Clean Off-White SaaS Design System
+  Inspired by modern minimalist SaaS widget galleries (Linear, Stripe, Raycast):
+  - Soft off-white offset canvas (#F8F9FB)
+  - Pure white elevated widget cards with gentle floating shadows
+  - Monochromatic harmony with single disciplined accents
+  - Consistent, subdued semantic indicators
+*/
+
+@layer base {
+  :root {
+    /* Signature Light Mode: Soft Off-White Offset Canvas */
+    --background: 216 20% 97.5%;     /* #F8F9FB */
+    --foreground: 222 47% 11%;      /* #0F172A */
+
+    --card: 0 0% 100%;              /* Pure White #FFFFFF */
+    --card-foreground: 222 47% 11%;
+    --card-raised: 216 20% 95%;     /* #F1F3F7 */
+    --panel-header: 0 0% 100%;
+    --panel-inset: 216 18% 95%;      /* #F1F3F7 */
+
+    --primary: 222 47% 11%;         /* Deep Slate Navy #0F172A */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 216 16% 93%;       /* Soft Gray #EAECEF */
+    --secondary-foreground: 222 47% 15%;
+
+    --muted: 216 16% 94%;
+    --muted-foreground: 215 16% 47%;/* #64748B */
+
+    --accent: 222 47% 11%;
+    --accent-foreground: 0 0% 100%;
+    --cta: 222 47% 11%;
+
+    --border: 216 15% 90%;          /* #E2E5E9 */
+    --input: 216 15% 88%;
+    --ring: 222 47% 11%;
+    --radius: 1rem;
+
+    /* Subtle Floating Card Shadows (Matching Reference Image) */
+    --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+    --shadow-widget: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+    --shadow-shell: 0 20px 40px -15px rgba(15, 23, 42, 0.08);
+
+    /* Clean, Professional Status Colors (Not loud neon) */
+    --allow: 160 84% 39%;           /* Emerald #059669 */
+    --warn: 38 92% 45%;             /* Amber #D97706 */
+    --block: 350 89% 55%;           /* Rose #E11D48 */
+  }
+
+  .dark {
+    /* Minimal Dark Variant */
+    --background: 222 28% 7%;
+    --foreground: 210 24% 96%;
+
+    --card: 222 24% 10%;
+    --card-foreground: 210 24% 96%;
+    --card-raised: 222 22% 13%;
+    --panel-header: 222 24% 10%;
+    --panel-inset: 222 26% 8%;
+
+    --primary: 210 24% 96%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 222 18% 15%;
+    --secondary-foreground: 210 20% 92%;
+
+    --muted: 222 20% 13%;
+    --muted-foreground: 215 15% 60%;
+
+    --accent: 210 24% 96%;
+    --accent-foreground: 222 47% 11%;
+    --cta: 210 24% 96%;
+
+    --border: 222 18% 18%;
+    --input: 222 18% 22%;
+    --ring: 210 24% 96%;
+
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 10px 24px -10px rgba(0, 0, 0, 0.4);
+    --shadow-widget: 0 12px 30px -8px rgba(0, 0, 0, 0.5);
+    --shadow-shell: 0 20px 48px -12px rgba(0, 0, 0, 0.6);
+
+    --allow: 158 64% 48%;
+    --warn: 38 92% 52%;
+    --block: 350 89% 60%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  /* Technical Monospace font for tokens, hashes, timestamps, and JSON */
+  .mono {
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-feature-settings: "zero" 1;
+  }
+
+  .console-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+  }
+
+  /* Reference-style outer card container */
+  .panel {
+    position: relative;
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .panel:hover {
+    box-shadow: var(--shadow-widget);
+    border-color: hsl(var(--border) / 0.8);
+  }
+
+  /* Floating widget preview card (matching the reference image inner white card) */
+  .widget-preview {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 0.875rem;
+    box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.06), 0 4px 8px -2px rgba(0, 0, 0, 0.02);
+    padding: 1.125rem;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .widget-preview:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.09), 0 6px 10px -2px rgba(0, 0, 0, 0.03);
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 1.25rem 1.25rem 0.5rem;
+  }
+
+  .panel-inset {
+    background-color: hsl(var(--panel-inset));
+    border: 1px solid hsl(var(--border) / 0.7);
+    border-radius: calc(var(--radius) - 4px);
+  }
+
+  /* Segmented pill tab buttons (matching [All Widgets] [Installed] in reference) */
+  .pill-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border-radius: 9999px;
+    color: hsl(var(--muted-foreground));
+    transition: all 0.15s ease;
+  }
+
+  .pill-tab:hover {
+    color: hsl(var(--foreground));
+  }
+
+  .pill-tab.active {
+    background-color: hsl(var(--card));
+    color: hsl(var(--foreground));
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Minimal markdown styling */
+.prose-guardian h1 { @apply mb-3 mt-1 text-2xl font-bold tracking-tight text-foreground; }
+.prose-guardian h2 { @apply mb-2 mt-5 text-base font-semibold text-foreground; }
+.prose-guardian h3 { @apply mb-1 mt-3 text-sm font-semibold text-foreground; }
+.prose-guardian p { @apply my-1.5 leading-relaxed text-sm text-foreground; }
+.prose-guardian blockquote { @apply my-2 border-l-2 border-primary/50 bg-secondary/40 pl-3 py-1 text-muted-foreground rounded-r; }
+.prose-guardian table { @apply my-2.5 w-full border-collapse text-xs; }
+.prose-guardian th, .prose-guardian td { @apply border border-border px-3 py-2 text-left; }
+.prose-guardian th { @apply bg-secondary/80 font-semibold text-foreground; }
+.prose-guardian code { @apply mono rounded bg-secondary px-1.5 py-0.5 text-xs text-foreground font-medium; }
+.prose-guardian pre { @apply my-2.5 overflow-x-auto rounded-lg border border-border bg-secondary/30 p-3.5; }
+.prose-guardian pre code { @apply bg-transparent p-0 text-[12px] leading-relaxed; }
+.prose-guardian hr { @apply my-3.5 border-border; }
+.prose-guardian strong { @apply font-semibold text-foreground; }
+.prose-guardian ul { @apply my-1.5 list-disc pl-5 text-sm; }
+.prose-guardian ol { @apply my-1.5 list-decimal pl-5 text-sm; }
+.prose-guardian li { @apply my-0.5; }
+.prose-guardian a { @apply font-medium text-primary underline underline-offset-2 hover:no-underline; }
+
+/* Subtle scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}

@@ -1,0 +1,48 @@
+---
+title: "Scanning Messages"
+description: "scan_prompt — runs on every chat message, automatically."
+---
+
+## What triggers it
+
+`scan_prompt` runs on **every** message you send in a connected conversation — plain questions, pasted text, form or invoice content you type in, anything. Your assistant is instructed to call it before doing anything else with your message.
+
+## What it catches
+
+- API keys and secrets (AWS, GCP, GitHub, Stripe, Azure, private keys)
+- Credit card numbers
+- CVV / CVC codes
+- National IDs (SSN, Aadhaar, PAN)
+- Financial identifiers (GSTIN, IFSC codes, bank account numbers)
+- `.env`-style secret content pasted directly into chat
+- Prompt injection / jailbreak attempts (e.g. "ignore all previous instructions...")
+
+See [What We Detect](/what-we-detect/secrets-api-keys) for the full detector reference.
+
+## Example: pasting an AWS key
+
+<CodeGroup>
+```text You type
+Deploy this code using my AWS key: AKIAIOSFODNN7EXAMPLE
+```
+
+```text What happens next (not shown to you)
+Assistant calls scan_prompt("Deploy this code using my AWS key: AKIAIOSFODNN7EXAMPLE")
+→ api_key detector fires, severity: critical
+→ decision: BLOCK
+```
+</CodeGroup>
+
+Your assistant then shows you a plain-language warning instead of proceeding — it never echoes the key back, even in the warning message. See [Understanding Results](/results/decisions) for what `BLOCK` means and what to do next.
+
+## Example: a clean message
+
+If you ask something like "What is the capital of France?", `scan_prompt` still runs, finds nothing, and your assistant answers normally — the scan is invisible when there's nothing to flag.
+
+## Forms, invoices, and structured content
+
+If you paste in a form, invoice, or ID card as text, the assistant is instructed to extract **all** fields — names, numbers, codes, addresses, dates, amounts — into the scan, not just the parts that look obviously sensitive. This is so a scattered SSN or account number in the middle of an otherwise-ordinary form doesn't get missed.
+
+## What this tool does *not* handle
+
+Files and images are routed to different tools — see [Scanning Files](/how-scanning-works/scanning-files) and [Scanning Images](/how-scanning-works/scanning-images).
