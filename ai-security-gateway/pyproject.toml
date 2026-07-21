@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-security-gateway"
+version = "0.1.0"
+description = "AI Security Gateway — MCP server with sensitive data leakage prevention"
+requires-python = ">=3.11"
+readme = "README.md"
+license = { text = "MIT" }
+
+dependencies = [
+    # MCP SDK (SSE + auth) — pin <2 while v2 is pre-release
+    "mcp[auth]>=1.9,<2",
+    # ASGI framework (used natively by MCP SDK)
+    "starlette>=0.40",
+    "uvicorn[standard]>=0.30",
+    # Data validation
+    "pydantic>=2.0,<3",
+    "pydantic-settings>=2.0,<3",
+    # Config file parsing
+    "pyyaml>=6.0",
+    # Structured JSON logging
+    "structlog>=24.0",
+    # National ID & Luhn validation
+    "python-stdnum>=1.19",
+    # JWT validation for OAuth TokenVerifier
+    "PyJWT[crypto]>=2.8",
+    "httpx>=0.27",          # async JWKS fetch
+    # Local env config
+    "python-dotenv>=1.0",
+    # Document scanning — PDF hidden-text detection
+    "pymupdf>=1.24",
+    # Document scanning — Image OCR (requires Tesseract binary on OS PATH)
+    "pytesseract>=0.3.10",
+    "Pillow>=10.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "httpx>=0.27",
+    "anyio[trio]>=4.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["core*", "detectors*", "policy*", "audit*", "mcp_server*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

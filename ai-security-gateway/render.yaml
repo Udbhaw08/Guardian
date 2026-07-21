@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: ai-security-gateway
+    runtime: python
+    # Render auto-detects Python version from pyproject.toml / .python-version
+    # Create a .python-version file with "3.11" if auto-detection fails.
+    buildCommand: pip install -e ".[dev]"
+    startCommand: uvicorn mcp_server.app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      # ── Public URL ────────────────────────────────────────────────────────
+      # Set to this service's Render URL after first deploy.
+      # Example: https://ai-security-gateway.onrender.com
+      - key: MCP_PUBLIC_URL
+        sync: false  # fill in manually after deploy
+
+      # ── Auth (OAuth 2.1 Resource Server) ─────────────────────────────────
+      - key: AUTH_ISSUER_URL
+        sync: false  # e.g. https://your-tenant.auth0.com/
+
+      - key: AUTH_JWKS_URI
+        sync: false  # e.g. https://your-tenant.auth0.com/.well-known/jwks.json
+
+      - key: AUTH_AUDIENCE
+        sync: false  # e.g. https://ai-security-gateway
+
+      - key: MCP_REQUIRED_SCOPE
+        sync: false  # e.g. scan:prompt
+
+      # ── Feature flags ─────────────────────────────────────────────────────
+      - key: AUTH_ENABLED
+        value: "true"  # always true in production
+
+      - key: LOG_LEVEL
+        value: "INFO"
+
+      # ── Policy ────────────────────────────────────────────────────────────
+      # Leave unset to use the bundled policy/policies.yaml
+      # - key: POLICY_FILE_PATH
+      #   value: policy/policies.yaml
