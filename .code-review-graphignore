@@ -1,0 +1,16 @@
+# Ignore dependency and cache directories across any depth
+*node_modules*
+*.venv*
+*venv*
+*.git*
+*__pycache__*
+*dist*
+*build*
+*.pytest_cache*
+*.mypy_cache*
+*.egg-info*
+*coverage*
+*.lock
+package-lock.json
+*.db*
+*.sqlite*

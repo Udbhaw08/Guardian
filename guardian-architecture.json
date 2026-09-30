@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Guardian — AI Security Gateway & Governance Platform",
+    "subtitle": "Runtime Prompt & Document Security Scanning Pipeline with FastMCP & Management Console",
+    "output": "guardian-architecture.html",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "mcp-traffic",
+        "label": "AI Prompt Interception",
+        "focus": ["ai_clients", "ngrok_edge", "mcp_gateway", "core_scanner"],
+        "note": "Claude/ChatGPT MCP requests terminate at FastMCP server before reaching LLMs."
+      },
+      {
+        "id": "deep-inspection",
+        "label": "Multi-Detector Scanning",
+        "focus": ["core_scanner", "detector_registry", "document_pipeline", "policy_engine"],
+        "note": "Parallel scans for credentials, financial data, jailbreaks, and stealth injection."
+      },
+      {
+        "id": "audit-governance",
+        "label": "Policy Enforcement & Audit",
+        "focus": ["policy_engine", "audit_db", "rest_api", "dashboard"],
+        "note": "Highest-severity action resolution and masked audit logging to dashboard."
+      }
+    ]
+  },
+  "components": [
+    { "id": "ai_clients", "type": "external", "label": "AI Clients & IDEs", "sublabel": "Claude / ChatGPT / stdio", "pos": [40, 90], "size": [140, 54], "brand": "claude" },
+    { "id": "ngrok_edge", "type": "cloud", "label": "Edge Tunnel (Ngrok)", "sublabel": "Public HTTPS :8000", "pos": [240, 90], "size": [140, 54], "tag": "Reverse Proxy" },
+    { "id": "mcp_gateway", "type": "backend", "label": "FastMCP Gateway", "sublabel": "Starlette ASGI :8000", "pos": [440, 90], "size": [140, 54], "tag": "OAuth 2.1 / JWKS" },
+    { "id": "core_scanner", "type": "security", "label": "Core Scanner", "sublabel": "Protocol-Agnostic", "pos": [650, 90], "size": [140, 54], "tag": "Zero Raw Leaks" },
+    { "id": "detector_registry", "type": "backend", "label": "Detection Swarm", "sublabel": "API Keys, CC, PII, Rules", "pos": [870, 90], "size": [140, 54], "tag": "@register" },
+
+    { "id": "document_pipeline", "type": "backend", "label": "Document Vision", "sublabel": "PDF / Image / OCR / ML", "pos": [440, 205], "size": [140, 54], "tag": "Stealth Detection" },
+    { "id": "policy_engine", "type": "security", "label": "Policy Engine", "sublabel": "policies.yaml Rules", "pos": [650, 205], "size": [140, 54], "tag": "Highest Severity" },
+
+    { "id": "admin_user", "type": "external", "label": "Security Admin", "sublabel": "Browser Console UI", "pos": [40, 320], "size": [140, 54] },
+    { "id": "dashboard", "type": "frontend", "label": "Guardian Console", "sublabel": "React 18 + Vite :5173", "pos": [240, 320], "size": [140, 54], "brand": "react", "tag": "Tailwind / Feed" },
+    { "id": "rest_api", "type": "backend", "label": "Guardian REST API", "sublabel": "Uvicorn :8001", "pos": [440, 320], "size": [140, 54], "tag": "CORS / Telemetry" },
+    { "id": "audit_db", "type": "database", "label": "Audit Event Store", "sublabel": "SQLite :scans.db", "pos": [650, 320], "size": [140, 54], "brand": "sqlite", "tag": "Masked Spans Only" }
+  ],
+  "boundaries": [
+    {
+      "kind": "security-group",
+      "label": "Guardian Security Perimeter",
+      "wraps": ["mcp_gateway", "core_scanner", "detector_registry", "document_pipeline", "policy_engine"],
+      "pad": 16
+    },
+    {
+      "kind": "region",
+      "label": "Management & Observability Plane",
+      "wraps": ["dashboard", "rest_api", "audit_db"],
+      "pad": 14
+    }
+  ],
+  "connections": [
+    { "from": "ai_clients", "to": "ngrok_edge", "label": "MCP", "labelDy": -12, "variant": "emphasis" },
+    { "from": "ngrok_edge", "to": "mcp_gateway", "label": "Tunnel", "labelDy": 12, "variant": "emphasis" },
+    { "from": "mcp_gateway", "to": "core_scanner", "label": "scan_prompt", "labelDy": 12, "variant": "security" },
+    { "from": "mcp_gateway", "to": "document_pipeline", "label": "scan_doc", "fromSide": "bottom", "toSide": "top", "labelAt": [550, 174], "variant": "security" },
+    { "from": "core_scanner", "to": "detector_registry", "label": "Text Scan", "labelDy": -12 },
+    { "from": "detector_registry", "to": "policy_engine", "label": "Matches", "fromSide": "bottom", "toSide": "right", "labelAt": [865, 220], "variant": "dashed" },
+    { "from": "document_pipeline", "to": "policy_engine", "label": "Doc Verdict", "fromSide": "right", "toSide": "left", "labelDy": -12, "variant": "dashed" },
+    { "from": "policy_engine", "to": "audit_db", "label": "Log Scan", "fromSide": "bottom", "toSide": "top", "labelAt": [760, 289], "variant": "dashed" },
+    { "from": "admin_user", "to": "dashboard", "label": "HTTPS", "labelDy": -12, "variant": "emphasis" },
+    { "from": "dashboard", "to": "rest_api", "label": "REST", "labelDy": 12, "variant": "emphasis" },
+    { "from": "rest_api", "to": "audit_db", "label": "Query Scans", "labelDy": 12 }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Ingress & Interception",
+      "items": [
+        "FastMCP ASGI server terminates Claude and ChatGPT connections over Streamable HTTP or stdio",
+        "OAuth 2.1 resource-server validates external Bearer tokens via JWKS",
+        "Ngrok tunnel exposes port 8000 safely for public custom AI connectors"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Deep Multi-Modal Detection",
+      "items": [
+        "Pluggable text detectors for API keys (Shannon entropy), credit cards (Luhn), and prompt injection",
+        "Document & vision pipeline inspects PDFs and images for white-on-white text and stealth payloads",
+        "Declarative policy engine enforces highest-severity decision (BLOCK > WARN_CONFIRM > ALLOW)"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Governance & Observability",
+      "items": [
+        "Strict Zero-Raw-Data-Leak Invariant: only masked values and byte offsets are ever logged or stored",
+        "Indexed SQLite scan_events store enables high-performance real-time security telemetry",
+        "React 18 management console displays live event feeds, detector catalogs, and policy editors"
+      ]
+    }
+  ]
+}
